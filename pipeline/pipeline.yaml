@@ -1,0 +1,72 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  labels:
+    app.kubernetes.io/instance: python-rest-api
+    app.kubernetes.io/name: python-rest-api
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    pipeline.openshift.io/strategy: docker
+    pipeline.openshift.io/type: kubernetes
+  name: python-rest-api
+  namespace: python-rest-api
+spec:
+  params:
+  - default: python-rest-api
+    name: APP_NAME
+    type: string
+  - default: https://github.com/bugbiteme/python-rest-api.git
+    name: GIT_REPO
+    type: string
+  - default: ""
+    name: GIT_REVISION
+    type: string
+  - default: image-registry.openshift-image-registry.svc:5000/python-rest-api/python-rest-api
+    name: IMAGE_NAME
+    type: string
+  - default: .
+    name: PATH_CONTEXT
+    type: string
+  tasks:
+  - name: fetch-repository
+    params:
+    - name: url
+      value: $(params.GIT_REPO)
+    - name: revision
+      value: $(params.GIT_REVISION)
+    - name: subdirectory
+      value: ""
+    - name: deleteExisting
+      value: "true"
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: workspace
+  - name: build
+    params:
+    - name: IMAGE
+      value: $(params.IMAGE_NAME)
+    - name: TLSVERIFY
+      value: "false"
+    - name: CONTEXT
+      value: $(params.PATH_CONTEXT)
+    runAfter:
+    - fetch-repository
+    taskRef:
+      kind: ClusterTask
+      name: buildah
+    workspaces:
+    - name: source
+      workspace: workspace
+  - name: deploy
+    params:
+    - name: SCRIPT
+      value: oc rollout status deploy/$(params.APP_NAME)
+    runAfter:
+    - build
+    taskRef:
+      kind: ClusterTask
+      name: openshift-client
+  workspaces:
+  - name: workspace
