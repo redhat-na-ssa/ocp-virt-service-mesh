@@ -1,0 +1,185 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: service-a
+    app.kubernetes.io/component: service-a
+    app.kubernetes.io/instance: service-a
+    app.kubernetes.io/name: service-a
+    app.kubernetes.io/part-of: app
+  name: service-a
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: service-a
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: service-b
+    app.kubernetes.io/component: service-b
+    app.kubernetes.io/instance: service-b
+    app.kubernetes.io/name: service-b
+    app.kubernetes.io/part-of: app
+  name: service-b
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: service-b
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: service-a
+    app.kubernetes.io/component: service-a
+    app.kubernetes.io/instance: service-a
+    app.kubernetes.io/name: service-a
+    app.kubernetes.io/part-of: app
+  name: service-a
+spec:
+  port:
+    targetPort: 8080-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: service-a
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: service-b
+    app.kubernetes.io/component: service-b
+    app.kubernetes.io/instance: service-b
+    app.kubernetes.io/name: service-b
+    app.kubernetes.io/part-of: app
+  name: service-b
+spec:
+  port:
+    targetPort: 8080-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: service-b
+    weight: 100
+  wildcardPolicy: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: service-a
+    app.kubernetes.io/component: service-a
+    app.kubernetes.io/instance: service-a
+    app.kubernetes.io/name: service-a
+    app.kubernetes.io/part-of: app
+  name: service-a
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: service-a
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: service-a
+        deployment: service-a
+    spec:
+      containers:
+      - env:
+        - name: SERVICE_LOCAL
+          value: service-a
+        - name: SERVICE_REMOTE
+          value: service-b
+        image: quay.io/llevy/service-b:v1
+        imagePullPolicy: Always
+        name: service-a
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: service-b
+    app.kubernetes.io/component: service-b
+    app.kubernetes.io/instance: service-b
+    app.kubernetes.io/name: service-b
+    app.kubernetes.io/part-of: app
+  name: service-b-v1
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: service-b
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: service-b
+        deployment: service-b
+    spec:
+      containers:
+      - env:
+        - name: SERVICE_LOCAL
+          value: service-b-v1
+        - name: SERVICE_REMOTE
+          value: service-a
+        image: quay.io/llevy/service-b:v1
+        imagePullPolicy: Always
+        name: service-b
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

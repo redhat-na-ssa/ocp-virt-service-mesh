@@ -49,6 +49,18 @@ Once you've deactivated the virtual environment, you can simply delete its direc
 rm -rf venv  # Unix/Linux/MacOS
 rmdir /s /q venv  # Windows
 ```
+
+You can use the yaml files found in the k8 directory:
+- `k8/deploy-all` will deploy two containers using this code that I have pushed to a public registry
+- `k8/deploy-serviceb-v2-yaml` will deploy a v2 tagged container of service b (to test load balancing and service mesh)  
+
+```
+oc create -f k8/deploy-all.yaml
+
+oc create -f k8/deploy-serviceb-v2.yaml
+```
+
+
 For some swagger action:
 
 ```
