@@ -23,12 +23,12 @@ async def usage():
     return {"message": "See /docs for API usage"}
 
 @app.get("/hello")
-def read_hello():
+async def read_hello():
     # Return a JSON object with the key "message" and value "Hello World"
     return {"message": "Hello World from " + service_local}
 
-@app.get("/hello-b")
-def read_hello():
+@app.get("/hello-service")
+async def read_hello():
     url = "http://" + service_remote + ":8080/hello"
 
     headers = {
