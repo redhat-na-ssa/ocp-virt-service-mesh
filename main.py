@@ -1,5 +1,5 @@
 import os
-import httpx
+import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,8 +15,8 @@ app.add_middleware(
 )
 
 # Get the environment variable 'SERVICE_LOCAL', set to 'python-rest-api' if it doesn't exist
-service_local = os.getenv('SERVICE_LOCAL', 'python-rest-api')
-service_remote = os.getenv('SERVICE_REMOTE', 'python-rest-api')
+service_local = os.getenv('SERVICE_LOCAL', 'python-rest-api-a')
+service_remote = os.getenv('SERVICE_REMOTE', 'python-rest-api-b')
 
 @app.get("/")
 async def usage():
@@ -29,7 +29,12 @@ def read_hello():
 
 @app.get("/hello-b")
 def read_hello():
-    with httpx.AsyncClient() as client:
-        # Assuming 'service_remote' is the name of your Kubernetes service and it is exposed on port 8080
-        response = client.get("http://" + service_remote + ":8080/hello")
-        return {"response": response.json()}
+    url = "http://" + service_remote + ":8080/hello"
+
+    headers = {
+    'Content-Type': 'application/json'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    return {"response": response.json()}

@@ -1,4 +1,4 @@
 fastapi>=0.105.0
 uvicorn>=0.24.0.post1
 setuptools>=65.5.1
-httpx
+requests
