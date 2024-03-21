@@ -1,4 +1,5 @@
 import os
+import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,3 +26,10 @@ async def usage():
 def read_hello():
     # Return a JSON object with the key "message" and value "Hello World"
     return {"message": "Hello World from " + service_local}
+
+@app.get("/hello-b")
+def read_hello():
+    with httpx.AsyncClient() as client:
+        # Assuming 'service_remote' is the name of your Kubernetes service and it is exposed on port 8080
+        response = client.get("http://" + service_remote + ":8080/hello")
+        return {"response": response.json()}
