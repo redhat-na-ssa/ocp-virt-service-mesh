@@ -67,3 +67,43 @@ For some swagger action:
 <url>/docs
 <url>/redocs
 ```
+# Service Mesh stuff
+- Create the serive mesh in the 'istio-system' namespace (as dev/user)
+- Add the project/namespace with the mesh enabled pods to the ServiceMeshMemberRole (can be done in OpenShift web terminal)
+- Create a gateway in the app namespace (use `gateway.yaml` as an example)
+- Create VirtualService (use `virtualservice.yaml` as an example) this add
+
+```
+oc get gw,vs                    
+NAME                                        AGE
+gateway.networking.istio.io/hello-gateway   5m23s
+
+NAME                                          GATEWAYS            HOSTS   AGE
+virtualservice.networking.istio.io/hello-vs   ["hello-gateway"]   ["*"]   49s
+```
+
+- now you should be able to access the service through the ingress gatway
+
+```
+oc get route istio-ingressgateway -n istio-system                    
+NAME                   HOST/PORT                 
+istio-ingressgateway   istio-ingressgateway-istio-system.apps.<domain>  
+```
+
+- same for other services like kiali
+
+
+```
+NAME    HOST/PORT                        
+kiali   kiali-istio-system.apps.<domain> 
+```
+
+- access the API through the gateway
+
+```
+curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshops.io/hello
+{"message":"Hello World from service-a"}
+
+❯ curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshops.io/hello-service
+{"response":{"message":"Hello World from service-b-v1"}}
+```
