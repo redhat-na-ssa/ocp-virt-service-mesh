@@ -107,3 +107,4 @@ curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshop
 ❯ curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshops.io/hello-service
 {"response":{"message":"Hello World from service-b-v1"}}
 ```
+- TODO: Network shaping between releases
