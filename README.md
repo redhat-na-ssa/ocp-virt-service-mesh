@@ -67,9 +67,15 @@ For some swagger action:
 <url>/docs
 <url>/redocs
 ```
-# Service Mesh stuff
+# OpenShift Service Mesh stuff
+- Enable Service Mesh Operators (as admin)
+  - Elastic Search
+  - Jaeger
+  - Kiali
+  - Service Mesh
+- Create `istio-system` namespace/project (as dev/user)
 - Create the serive mesh in the 'istio-system' namespace (as dev/user)
-- Add the project/namespace with the mesh enabled pods to the ServiceMeshMemberRole (can be done in OpenShift web terminal)
+- Add the project/namespace with the mesh enabled pods to the ServiceMeshMemberRole (can be done in OpenShift web terminal or apply example `ServiceMeshMemberRole.yaml` file to `istio-system` namespace)
 - Create a gateway in the app namespace (use `gateway.yaml` as an example)
 - Create VirtualService (use `virtualservice.yaml` as an example) this add
 
