@@ -1,13 +1,8 @@
-apiVersion: v1
-items:
-- apiVersion: maistra.io/v1
-  kind: ServiceMeshMemberRoll
-  metadata:
-    finalizers:
-    - maistra.io/istio-operator
-    name: default
-    namespace: istio-system
-  spec:
-    members:
+apiVersion: maistra.io/v1
+kind: ServiceMeshMemberRoll
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  members:
     - rest-api-with-mesh
-  

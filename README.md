@@ -69,23 +69,46 @@ For some swagger action:
 ```
 # OpenShift Service Mesh stuff
 - Enable Service Mesh Operators (as admin)
-  - Elastic Search
-  - Jaeger
-  - Kiali
-  - Service Mesh
+  - OpenShift Elasticsearch Operator
+  - Red Hat OpenShift distributed tracing platform
+  - Kiali Operator (provided by Red Hat)
+  - Red Hat OpenShift Service Mesh
 - Create `istio-system` namespace/project (as dev/user)
-- Create the serive mesh in the 'istio-system' namespace (as dev/user)
+- Create the Istio Service Mesh Control Plane instance in the 'istio-system' namespace (as dev/user)
 - Add the project/namespace with the mesh enabled pods to the ServiceMeshMemberRole (can be done in OpenShift web terminal or apply example `ServiceMeshMemberRole.yaml` file to `istio-system` namespace)
-- Create a gateway in the app namespace (use `gateway.yaml` as an example)
-- Create VirtualService (use `virtualservice.yaml` as an example) this add
-
+    - `oc apply -f k8/ServiceMeshMemberRole.yaml -n istio-system`
+- deploy the apps
 ```
-oc get gw,vs                    
+oc apply -f k8/deploy-all.yaml                           
+service/service-a created
+service/service-b created
+deployment.apps/service-a created
+deployment.apps/service-b-v1 created
+```
+- Create a gateway in the app namespace (use `gateway.yaml` as an example)
+  - `oc apply -f k8/gateway.yaml`
+- Create VirtualService (use `virtualservice.yaml` as an example) this add
+  - `oc apply -f k8/virtualservice.yaml`
+```
+oc get pods,svc,deploy,gw,vs                                                                           llevy-mac: Thu Apr  4 16:53:22 2024
+
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/service-a-54655cfcf-vmtvc      2/2     Running   0          4m28s
+pod/service-b-v1-5df564d98-ktjjp   2/2     Running   0          4m27s
+
+NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/service-a   ClusterIP   172.31.253.42    <none>        8080/TCP   4m30s
+service/service-b   ClusterIP   172.31.113.100   <none>        8080/TCP   4m29s
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/service-a      1/1     1            1           4m29s
+deployment.apps/service-b-v1   1/1     1            1           4m28s
+
 NAME                                        AGE
-gateway.networking.istio.io/hello-gateway   5m23s
+gateway.networking.istio.io/hello-gateway   89s
 
 NAME                                          GATEWAYS            HOSTS   AGE
-virtualservice.networking.istio.io/hello-vs   ["hello-gateway"]   ["*"]   49s
+virtualservice.networking.istio.io/hello-vs   ["hello-gateway"]   ["*"]   18s
 ```
 
 - now you should be able to access the service through the ingress gatway
@@ -113,4 +136,5 @@ curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshop
 ❯ curl istio-ingressgateway-istio-system.apps.cluster-b5pcr.dynamic.redhatworkshops.io/hello-service
 {"response":{"message":"Hello World from service-b-v1"}}
 ```
+- TODO: Show traffic health
 - TODO: Network shaping between releases
