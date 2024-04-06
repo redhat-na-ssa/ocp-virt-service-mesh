@@ -77,6 +77,7 @@ spec:
       labels:
         app: service-a
         deployment: service-a
+        version: "v1"
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
