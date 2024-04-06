@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: fedora01-api
+spec:
+  to:
+    kind: Service
+    name: fedora01-app
+  port:
+    targetPort: http
