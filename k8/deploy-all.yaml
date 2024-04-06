@@ -125,6 +125,7 @@ spec:
       labels:
         app: service-b
         deployment: service-b
+        version: "v1"
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

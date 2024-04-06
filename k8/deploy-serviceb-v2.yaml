@@ -25,6 +25,7 @@ spec:
       labels:
         app: service-b
         deployment: service-b
+        version: "v2"
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
