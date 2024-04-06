@@ -1,24 +1,20 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  annotations:
-    kubevirt.io/latest-observed-api-version: v1
-    kubevirt.io/storage-observed-api-version: v1
   labels:
-    app: fedora01
-    app.kubernetes.io/part-of: app
+    app: fedora02
     vm.kubevirt.io/template: fedora-server-small
     vm.kubevirt.io/template.namespace: openshift
     vm.kubevirt.io/template.revision: "1"
     vm.kubevirt.io/template.version: v0.26.0
-  name: fedora01
+  name: fedora02
 spec:
   dataVolumeTemplates:
   - apiVersion: cdi.kubevirt.io/v1beta1
     kind: DataVolume
     metadata:
       creationTimestamp: null
-      name: fedora01
+      name: fedora02
     spec:
       sourceRef:
         kind: DataSource
@@ -32,14 +28,16 @@ spec:
   template:
     metadata:
       annotations:
+        sidecar.istio.io/inject: "true"
         vm.kubevirt.io/flavor: small
         vm.kubevirt.io/os: fedora
         vm.kubevirt.io/workload: server
       creationTimestamp: null
       labels:
         app: service-b
-        kubevirt.io/domain: fedora01
+        kubevirt.io/domain: fedora02
         kubevirt.io/size: small
+        version: VM2
     spec:
       architecture: amd64
       domain:
@@ -55,11 +53,8 @@ spec:
           - disk:
               bus: virtio
             name: cloudinitdisk
-          - disk: {}
-            name: environment-disk-l34kuu
-            serial: PBPXZ9
           interfaces:
-          - macAddress: 02:1f:49:00:00:01
+          - macAddress: 02:1f:49:00:00:07
             masquerade: {}
             model: virtio
             name: default
@@ -83,17 +78,19 @@ spec:
       terminationGracePeriodSeconds: 180
       volumes:
       - dataVolume:
-          name: fedora01
+          name: fedora02
         name: rootdisk
       - cloudInitConfigDrive:
-          userData: |
+          userData: |-
             #cloud-config
             user: user1
             password: openshift
-            chpasswd:
-              expire: false
+            chpasswd: { expire: False }
+            packages:
+              - git
+            runcmd:
+              - export SERVICE_LOCAL=fedora02
+              - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
+              - cd /home/user1/app
+              - sh /home/user1/app/start-on-vm.sh
         name: cloudinitdisk
-      - configMap:
-          name: vm-env
-        name: environment-disk-l34kuu
-
