@@ -160,4 +160,5 @@ virtualmachineinstance.kubevirt.io/fedora01   63m   Running   10.132.2.46   work
 virtualmachineinstance.kubevirt.io/fedora02   62m   Running   10.133.2.61   worker-cluster-82j5r-3   True
 ```
 
+- TODO: service-a talk to a virtual service  of service-b
 - TODO: Network shaping between releases
