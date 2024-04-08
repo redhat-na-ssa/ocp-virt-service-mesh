@@ -1,23 +1,6 @@
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
-  name: hello-vs
-spec:
-  hosts:
-  - "*"
-  gateways:
-  - hello-gateway
-  http:
-  - route:
-    - destination:
-        host: service-a
-#        port:
-#          name: http-8080
-#          number: 8080
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
   name: service-b
 spec:
   hosts:
@@ -27,11 +10,15 @@ spec:
     - destination:
         host: service-b
         subset: v1
-      weight: 100
+        port:
+          number: 8080
+      weight: 25
     - destination:
         host: service-b
         subset: v2
-      weight: 0
+        port:
+          number: 8080
+      weight: 75
 #    - destination:
 #        host: service-b
 ##        subset: VM1
@@ -39,4 +26,3 @@ spec:
 #    - destination:
 #        host: service-b
 #        subset: VM2
-#      weight: 0

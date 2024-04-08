@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: service-b
+    version: v2
     app.kubernetes.io/component: service-b
     app.kubernetes.io/instance: service-b
     app.kubernetes.io/name: service-b
@@ -15,6 +16,7 @@ spec:
   selector:
     matchLabels:
       app: service-b
+      version: v2
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -25,7 +27,7 @@ spec:
       labels:
         app: service-b
         deployment: service-b
-        version: "v2"
+        version: v2
       annotations:
         sidecar.istio.io/inject: "true"
     spec:

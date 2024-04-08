@@ -51,8 +51,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    sidecar.istio.io/inject: "true"
   labels:
     app: service-a
     app.kubernetes.io/component: service-a
@@ -104,6 +102,7 @@ kind: Deployment
 metadata:
   labels:
     app: service-b
+    version: v1
     app.kubernetes.io/component: service-b
     app.kubernetes.io/instance: service-b
     app.kubernetes.io/name: service-b
