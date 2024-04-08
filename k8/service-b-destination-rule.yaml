@@ -11,3 +11,6 @@ spec:
   - name: v2
     labels:
       version: v2
+  - name: VM1
+    labels:
+      version: VM1

@@ -1,0 +1,87 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: fedora01
+  annotations:
+    description: VM example
+  labels:
+    app: service-b
+    version: VM1
+    app.kubernetes.io/component: service-b
+    app.kubernetes.io/instance: service-b
+    app.kubernetes.io/name: service-b
+    app.kubernetes.io/part-of: app
+    os.template.kubevirt.io/fedora: 'true'
+  namespace: rest-api-with-mesh
+spec:
+  running: true
+  selector:
+    matchLabels:
+      app: service-b
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+        sidecar.istio.io/inject: "true"
+      labels:
+        kubevirt.io/domain: fedora01
+        kubevirt.io/size: small
+        app: service-b
+        deployment: service-b
+        version: VM1
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: q35
+        memory:
+          guest: 2Gi
+      hostname: fedora01
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: user1
+              password: openshift
+              chpasswd: { expire: False }
+              packages:
+                - git
+              runcmd:
+                - export SERVICE_LOCAL=fedora01
+                - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
+                - cd /home/user1/app
+                - sh /home/user1/app/start-on-vm.sh
+          name: cloudinitdisk
