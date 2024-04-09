@@ -1,5 +1,8 @@
 # python-rest-api
 
+See `README.INSTRUCTIONS.md` for Canary roll out from VM to pod in OpenShift with Service Mesh.   
+[link](./README.INSTRUCTIONS.md)
+
 uses environment variable to set the name of the service
 `SERVICE_LOCAL` (default value is `"python-rest-api"`)   
 

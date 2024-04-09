@@ -80,8 +80,10 @@ spec:
               packages:
                 - git
               runcmd:
+                - mkdir /home/user1
                 - export SERVICE_LOCAL=fedora01
                 - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
-                - cd /home/user1/app
+                - chown -R user1:user1 /home/user1/app
+                - cd /home/user1/app 
                 - sh /home/user1/app/start-on-vm.sh
           name: cloudinitdisk

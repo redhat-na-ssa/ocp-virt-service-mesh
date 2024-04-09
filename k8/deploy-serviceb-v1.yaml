@@ -3,13 +3,13 @@ kind: Deployment
 metadata:
   labels:
     app: service-b
-    version: v2
+    version: v1
     app.kubernetes.io/component: service-b
     app.kubernetes.io/instance: service-b
     app.kubernetes.io/name: service-b
     app.kubernetes.io/part-of: app
     app.openshift.io/runtime: python
-  name: service-b-v2
+  name: service-b-v1
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -17,7 +17,6 @@ spec:
   selector:
     matchLabels:
       app: service-b
-      version: v2
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -28,17 +27,17 @@ spec:
       labels:
         app: service-b
         deployment: service-b
-        version: v2
+        version: "v1"
       annotations:
         sidecar.istio.io/inject: "true"
     spec:
       containers:
       - env:
         - name: SERVICE_LOCAL
-          value: service-b-v2
+          value: service-b-v1
         - name: SERVICE_REMOTE
           value: service-a
-        image: quay.io/llevy/service-b:v2
+        image: quay.io/llevy/service-b:v1
         imagePullPolicy: Always
         name: service-b
         resources: {}
