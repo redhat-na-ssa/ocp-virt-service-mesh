@@ -71,8 +71,10 @@ Install OpenShift Virtualization using Operator Hub (as admin).
    - Click on `Red Hat OpenShift Service Mesh`
    - Click on `Create Instance` -> `Create` (default settings)
 4. Observe the deployment on the Service Mesh Control Plane in the Topology view   
+
    
 #### Deploy Kubernetes Resources
+![Initial Topology](img/topo1.png)
 I have created a script that will deploy all the Custom Resources needed to set up the demo:    
 
 ```
@@ -145,6 +147,7 @@ deployment.apps/service-b-v1 created
 ```
 validate the deployment
 
+![Deploy new service](img/topo2.png)
 ```
 oc get pods   
 
