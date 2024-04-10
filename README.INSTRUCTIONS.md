@@ -71,8 +71,19 @@ Install OpenShift Virtualization using Operator Hub (as admin).
    - Click on `Red Hat OpenShift Service Mesh`
    - Click on `Create Instance` -> `Create` (default settings)
 4. Observe the deployment on the Service Mesh Control Plane in the Topology view   
+![istio-system](img/istio-system.png)
+```
+oc get pods -n istio-system
+NAME                                    READY   STATUS    RESTARTS   AGE
+grafana-7854c4bc44-6b97l                2/2     Running   0          7m45s
+istio-egressgateway-5b6d946db7-7zk9t    1/1     Running   0          7m46s
+istio-ingressgateway-7c64676496-vcknz   1/1     Running   0          7m46s
+istiod-basic-69fcf6d7c8-h85tb           1/1     Running   0          8m31s
+jaeger-85b69fbf95-7dggn                 2/2     Running   0          7m42s
+kiali-7495b469df-v4qrq                  1/1     Running   0          7m1s
+prometheus-6bc7d48f74-8gnn6             3/3     Running   0          8m18s
+```
 
-   
 #### Deploy Kubernetes Resources
 ![Initial Topology](img/topo1.png)
 I have created a script that will deploy all the Custom Resources needed to set up the demo:    
