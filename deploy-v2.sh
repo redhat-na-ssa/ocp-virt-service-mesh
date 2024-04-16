@@ -1,4 +1,4 @@
-oc apply -f k8/virtualservice-service-b.yaml
+oc apply -f k8/virtualservice-service-b-100-0.yaml
 sleep 20
 oc apply -f k8/virtualservice-service-b-90-10.yaml
 sleep 20
