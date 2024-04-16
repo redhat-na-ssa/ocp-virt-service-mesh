@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/instance: service-b
     app.kubernetes.io/name: service-b
     app.kubernetes.io/part-of: app
-    app.openshift.io/runtime: python
+    app.openshift.io/runtime: quarkus
   name: service-b-v2
 spec:
   progressDeadlineSeconds: 600
