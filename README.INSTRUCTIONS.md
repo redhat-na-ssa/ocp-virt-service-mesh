@@ -65,7 +65,7 @@ Install OpenShift Virtualization using Operator Hub (as admin).
 
 *(logged in as user/non-admin)*   
 
-2. Create a project called `isio-system`
+2. Create a project called `istio-system`
 3. While in the `isio-system` project, from the `Administrator` view:
    - `Operators->Installed Operators`
    - Click on `Red Hat OpenShift Service Mesh`
