@@ -222,6 +222,7 @@ There is always room for improvement, but this demo was meant to keep it as simp
     
        
 Some ideas:
+- Migrate traffic and other Service Mesh functionality between VMs only
 - Deploy rources with GitOps/ArgoCD
 - Build the new ap/pod with Pipelines/Tekton
 - Use Argo Rollouts to auto roll out the pod
