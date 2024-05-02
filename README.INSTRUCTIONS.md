@@ -219,6 +219,21 @@ the same workload in a container rather than a legacy VM.
 
 ## TODO
 There is always room for improvement, but this demo was meant to keep it as simple as possible. This is open source, so feel free to make it better!
+
+Add kiali console inside of the OpenShift management console
+
+```
+apiVersion: kiali.io/v1alpha1
+kind: OSSMConsole
+metadata:
+  name: ossmconsole
+  namespace: openshift-operators
+spec:
+  version: default
+  kiali:
+    serviceName: 'kiali'
+    serviceNamespace: 'istio-system'
+```
     
        
 Some ideas:
