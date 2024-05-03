@@ -165,3 +165,4 @@ virtualmachineinstance.kubevirt.io/fedora02   62m   Running   10.133.2.61   work
 
 - TODO: service-a talk to a virtual service  of service-b
 - TODO: Network shaping between releases
+- TODO: refactor to more meaningful names for apps, not use service-a/b change to front end-back end
