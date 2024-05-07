@@ -104,8 +104,8 @@ destinationrule.networking.istio.io/service-b-destination-rule created
 Please note that you may need to wait a few minutes before the app is running on the VM becomes available (3-5 mins).
 
 To test:
-A REST API called `service-a` is a front-end API that is registered with the istio-gateway with two paths:
-- `/hello` returns `{"message":"Hello World from service-a"}`
+A REST API called `web-front-end` is a front-end API that is registered with the istio-gateway with two paths:
+- `/hello` returns `{"message":"Hello World from web-front-end"}`
 - `/hello-service` calls service-b (currently running on a Fedora VM) returns `{"response":{"message":"Hello World from fedora01"}}`
 
 
@@ -114,7 +114,7 @@ export GATEWAY=$(oc get route istio-ingressgateway -n istio-system -o template -
 
 ❯ curl $GATEWAY/hello
 
-{"message":"Hello World from service-a"}
+{"message":"Hello World from web-front-end"}
 
 ❯ curl $GATEWAY/hello-service
 
@@ -124,7 +124,7 @@ export GATEWAY=$(oc get route istio-ingressgateway -n istio-system -o template -
 ### Start the Demo
 ![demo](img/demo.png)
 
-To visualize this demo, you should use Kiali to observe traffic as it flows from `service-a` to `service-b`.
+To visualize this demo, you should use Kiali to observe traffic as it flows from `web-front-end` to `service-b`.
 This will also let you observe traffic topology as it transitions from VM1 to the `service-b-v1` pod.
 
 To get the URL for Kiali
@@ -163,7 +163,7 @@ validate the deployment
 oc get pods   
 
 NAME                           READY   STATUS    RESTARTS   AGE
-service-a-865d68dfdd-2dkfs     2/2     Running   0          32m
+web-front-end-865d68dfdd-2dkfs     2/2     Running   0          32m
 service-b-v1-c46576c9-2srwm    2/2     Running   0          45s
 virt-launcher-fedora01-8vcgh   3/3     Running   0          32m
 ```
