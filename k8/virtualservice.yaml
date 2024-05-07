@@ -10,4 +10,4 @@ spec:
   http:
   - route:
     - destination:
-        host: service-a
+        host: web-front-end
