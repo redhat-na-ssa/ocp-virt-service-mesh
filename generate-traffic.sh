@@ -6,7 +6,7 @@ export SLEEP=1
 while true
 do 
   date
-  curl $GATEWAY/hello-service
+  curl $GATEWAY/web/hello-service
   echo ""
   echo ""
   sleep $SLEEP

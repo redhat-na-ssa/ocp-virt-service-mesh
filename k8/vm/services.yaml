@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vm-front-end
+    app.kubernetes.io/component: vm-front-end
+    app.kubernetes.io/instance: vm-front-end
+    app.kubernetes.io/name: vm-front-end
+    app.kubernetes.io/part-of: app
+  name: vm-front-end
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http-port
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: vm-front-end
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vm-back-end
+    app.kubernetes.io/component: vm-back-end
+    app.kubernetes.io/instance: vm-back-end
+    app.kubernetes.io/name: vm-back-end
+    app.kubernetes.io/part-of: app
+  name: vm-back-end
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http-port
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: vm-back-end
+  sessionAffinity: None
+  type: ClusterIP
+

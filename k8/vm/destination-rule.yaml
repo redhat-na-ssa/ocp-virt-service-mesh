@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: vm-back-end
+spec:
+  host: vm-back-end
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: VM1
+    labels:
+      version: VM1
+    trafficPolicy: 
+      loadBalancer:
+        simple: ROUND_ROBIN
+  - name: VM2
+    labels:
+      version: VM2
+    trafficPolicy: 
+      loadBalancer:
+        simple: ROUND_ROBIN

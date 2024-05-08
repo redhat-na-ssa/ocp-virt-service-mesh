@@ -1,0 +1,270 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vm-front-end
+  annotations:
+    description: VM example
+  labels:
+    app: vm-front-end
+    version: VM1
+    app.kubernetes.io/component: vm-front-end
+    app.kubernetes.io/instance: vm-front-end
+    app.kubernetes.io/name: vm-front-end
+    app.kubernetes.io/part-of: app
+    os.template.kubevirt.io/fedora: 'true'
+  namespace: vm-to-vm
+spec:
+  running: true
+  selector:
+    matchLabels:
+      app: vm-front-end
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+        sidecar.istio.io/inject: "true"
+      labels:
+        kubevirt.io/domain: vm-front-end
+        kubevirt.io/size: small
+        app: vm-front-end
+        deployment: vm-front-end
+        version: VM1
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: q35
+        memory:
+          guest: 2Gi
+      hostname: vm-front-end
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: user1
+              password: openshift
+              chpasswd: { expire: False }
+              packages:
+                - git
+              runcmd:
+                - mkdir /home/user1
+                - export SERVICE_LOCAL=vm-front-end
+                - export SERVICE_REMOTE=vm-back-end
+                - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
+                - chown -R user1:user1 /home/user1/app
+                - cd /home/user1/app 
+                - sh /home/user1/app/start-on-vm.sh
+          name: cloudinitdisk
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vm-backend-b1
+  annotations:
+    description: VM example
+  labels:
+    app: vm-back-end
+    version: VM1
+    app.kubernetes.io/component: vm-back-end
+    app.kubernetes.io/instance: vm-back-end
+    app.kubernetes.io/name: vm-back-end
+    app.kubernetes.io/part-of: app
+    os.template.kubevirt.io/fedora: 'true'
+  namespace: vm-to-vm
+spec:
+  running: true
+  selector:
+    matchLabels:
+      app: vm-back-end
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+        sidecar.istio.io/inject: "true"
+      labels:
+        kubevirt.io/domain: vm-backend-b1
+        kubevirt.io/size: small
+        app: vm-back-end
+        deployment: vm-back-end
+        version: VM1
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: q35
+        memory:
+          guest: 2Gi
+      hostname: vm-backend-b1
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: user1
+              password: openshift
+              chpasswd: { expire: False }
+              packages:
+                - git
+              runcmd:
+                - mkdir /home/user1
+                - export SERVICE_LOCAL=vm-backend-b1
+                - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
+                - chown -R user1:user1 /home/user1/app
+                - cd /home/user1/app 
+                - sh /home/user1/app/start-on-vm.sh
+          name: cloudinitdisk
+---
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: vm-backend-b2
+  annotations:
+    description: VM example
+  labels:
+    app: vm-back-end
+    version: VM2
+    app.kubernetes.io/component: vm-back-end
+    app.kubernetes.io/instance: vm-back-end
+    app.kubernetes.io/name: vm-back-end
+    app.kubernetes.io/part-of: app
+    os.template.kubevirt.io/fedora: 'true'
+  namespace: vm-to-vm
+spec:
+  running: true
+  selector:
+    matchLabels:
+      app: vm-back-end
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: small
+        vm.kubevirt.io/os: fedora
+        vm.kubevirt.io/workload: server
+        sidecar.istio.io/inject: "true"
+      labels:
+        kubevirt.io/domain: vm-backend-b2
+        kubevirt.io/size: small
+        app: vm-back-end
+        deployment: vm-back-end
+        version: VM2
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+          networkInterfaceMultiqueue: true
+          rng: {}
+        features:
+          acpi: {}
+          smm:
+            enabled: true
+        firmware:
+          bootloader:
+            efi: {}
+        machine:
+          type: q35
+        memory:
+          guest: 2Gi
+      hostname: vm-backend-b2
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - name: rootdisk
+          containerDisk:
+            image: quay.io/containerdisks/fedora
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: user1
+              password: openshift
+              chpasswd: { expire: False }
+              packages:
+                - git
+              runcmd:
+                - mkdir /home/user1
+                - export SERVICE_LOCAL=vm-backend-b2
+                - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
+                - chown -R user1:user1 /home/user1/app
+                - cd /home/user1/app 
+                - sh /home/user1/app/start-on-vm.sh
+          name: cloudinitdisk

@@ -6,8 +6,29 @@ spec:
   hosts:
   - "*"
   gateways:
-  - hello-gateway
+  - istio-system/hello-gateway
   http:
-  - route:
+  - match:
+    - uri:
+        exact: "/web"
+    rewrite:
+      uri: "/"
+    route:
     - destination:
-        host: web-front-end
+        host: web-front-end.rest-api-with-mesh.svc.cluster.local
+  - match:
+    - uri:
+        exact: "/web/hello"
+    rewrite:
+      uri: "/hello"
+    route:
+    - destination:
+        host: web-front-end.rest-api-with-mesh.svc.cluster.local
+  - match:
+    - uri:
+        exact: "/web/hello-service"
+    rewrite:
+      uri: "/hello-service"
+    route:
+    - destination:
+        host: web-front-end.rest-api-with-mesh.svc.cluster.local

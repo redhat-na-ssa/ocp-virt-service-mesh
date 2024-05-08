@@ -11,25 +11,25 @@ BPurple='\033[1;35m'      # Purple
 BCyan='\033[1;36m'        # Cyan
 BWhite='\033[1;37m'       # White
 
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-100-0.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-100-0.yaml -n rest-api-with-mesh
 echo "${BGreen}All${NC} traffic is routed to ${BGreen}VM1${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-90-10.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-90-10.yaml -n rest-api-with-mesh
 echo "${BGreen}90%${NC} traffic is routed to ${BGreen}VM1${NC} ${BYellow}10%${NC} to ${BYellow}pod${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-75-25.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-75-25.yaml -n rest-api-with-mesh
 echo "${BGreen}75%${NC} traffic is routed to ${BGreen}VM1${NC} ${BYellow}25%${NC} to ${BYellow}pod${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-50-50.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-50-50.yaml -n rest-api-with-mesh
 echo "${BGreen}50%${NC} traffic is routed to ${BGreen}VM1${NC} ${BYellow}50%${NC} to ${BYellow}pod${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-25-75.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-25-75.yaml -n rest-api-with-mesh
 echo "${BGreen}25%${NC} traffic is routed to ${BGreen}VM1${NC} ${BYellow}75%${NC} to ${BYellow}pod${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-10-90.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-10-90.yaml -n rest-api-with-mesh
 echo "${BGreen}10%${NC} traffic is routed to ${BGreen}VM1${NC} ${BYellow}90%${NC} to ${BYellow}pod${NC}"
 sleep $SLEEP
-oc apply -f k8/virtualservice-service-b-VM1-to-v1-0-100.yaml
+oc apply -f k8/virtualservice-service-b-VM1-to-v1-0-100.yaml -n rest-api-with-mesh
 echo "${BYellow}All${NC} traffic is routed to ${BYellow}pod${NC}"
 
 

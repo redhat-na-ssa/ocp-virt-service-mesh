@@ -6,3 +6,4 @@ metadata:
 spec:
   members:
     - rest-api-with-mesh
+    - vm-to-vm

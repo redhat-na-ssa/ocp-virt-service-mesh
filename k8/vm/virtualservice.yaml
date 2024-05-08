@@ -1,0 +1,52 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vm-front-end-vs
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - istio-system/hello-gateway
+  http:
+  - match:
+    - uri:
+        exact: "/vm"
+    rewrite:
+      uri: "/"
+    route:
+    - destination:
+        host: vm-front-end.vm-to-vm.svc.cluster.local
+  - match:
+    - uri:
+        exact: "/vm/hello"
+    rewrite:
+      uri: "/hello"
+    route:
+    - destination:
+        host: vm-front-end.vm-to-vm.svc.cluster.local
+  - match:
+    - uri:
+        exact: "/vm/hello-service"
+    rewrite:
+      uri: "/hello-service"
+    route:
+    - destination:
+        host: vm-front-end.vm-to-vm.svc.cluster.local
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: vm-back-end
+spec:
+  hosts:
+    - vm-back-end
+  http:
+  - route:
+    - destination:
+        host: vm-back-end
+        subset: VM1 
+      weight: 50
+    - destination:
+        host: vm-back-end
+        subset: VM2
+      weight: 50
