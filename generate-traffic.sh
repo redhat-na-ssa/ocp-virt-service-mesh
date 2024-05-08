@@ -11,3 +11,5 @@ do
   echo ""
   sleep $SLEEP
 done
+
+#curl $GATEWAY/vm/hello-service #for vm-to-vm namespace
