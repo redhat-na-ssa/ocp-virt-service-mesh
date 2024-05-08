@@ -12,3 +12,5 @@ spec:
         protocol: HTTP
       hosts:
         - "*"
+
+        #not deployed

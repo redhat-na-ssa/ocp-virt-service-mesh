@@ -39,14 +39,14 @@ metadata:
   name: vm-back-end
 spec:
   hosts:
-    - vm-back-end
+    - vm-back-end.vm-to-vm.svc.cluster.local
   http:
   - route:
     - destination:
-        host: vm-back-end
+        host: vm-back-end.vm-to-vm.svc.cluster.local
         subset: VM1 
       weight: 50
     - destination:
-        host: vm-back-end
+        host: vm-back-end.vm-to-vm.svc.cluster.local
         subset: VM2
       weight: 50

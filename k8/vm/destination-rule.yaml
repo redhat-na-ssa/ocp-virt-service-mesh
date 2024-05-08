@@ -20,3 +20,20 @@ spec:
     trafficPolicy: 
       loadBalancer:
         simple: ROUND_ROBIN
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: vm-front-end
+spec:
+  host: vm-front-end
+  trafficPolicy:
+    loadBalancer:
+      simple: RANDOM
+  subsets:
+  - name: VM1
+    labels:
+      version: VM1
+    trafficPolicy: 
+      loadBalancer:
+        simple: ROUND_ROBIN

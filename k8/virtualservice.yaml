@@ -15,7 +15,7 @@ spec:
       uri: "/"
     route:
     - destination:
-        host: web-front-end.rest-api-with-mesh.svc.cluster.local
+        host: web-front-end #.rest-api-with-mesh.svc.cluster.local
   - match:
     - uri:
         exact: "/web/hello"
@@ -23,7 +23,7 @@ spec:
       uri: "/hello"
     route:
     - destination:
-        host: web-front-end.rest-api-with-mesh.svc.cluster.local
+        host: web-front-end #.rest-api-with-mesh.svc.cluster.local
   - match:
     - uri:
         exact: "/web/hello-service"
@@ -31,4 +31,4 @@ spec:
       uri: "/hello-service"
     route:
     - destination:
-        host: web-front-end.rest-api-with-mesh.svc.cluster.local
+        host: web-front-end #.rest-api-with-mesh.svc.cluster.local
