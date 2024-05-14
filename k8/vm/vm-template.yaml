@@ -173,6 +173,7 @@ spec:
               runcmd:
                 - mkdir /home/user1
                 - export SERVICE_LOCAL=vm-backend-b1
+                - export SERVICE_REMOTE=vm-front-end
                 - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
                 - chown -R user1:user1 /home/user1/app
                 - cd /home/user1/app 
@@ -263,6 +264,7 @@ spec:
               runcmd:
                 - mkdir /home/user1
                 - export SERVICE_LOCAL=vm-backend-b2
+                - export SERVICE_REMOTE=vm-front-end
                 - git clone https://github.com/bugbiteme/python-rest-api.git /home/user1/app
                 - chown -R user1:user1 /home/user1/app
                 - cd /home/user1/app 
