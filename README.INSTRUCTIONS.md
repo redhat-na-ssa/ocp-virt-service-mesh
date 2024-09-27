@@ -58,8 +58,7 @@ Install OpenShift Virtualization using Operator Hub (as admin).
 1. Install OpenShift Service Mesh using Operator Hub (as admin)
 
 - Enable the following Service Mesh Operators 
-  - OpenShift Elasticsearch Operator
-  - Red Hat OpenShift distributed tracing platform
+  - Red Hat OpenShift distributed tracing platform (jaeger)
   - Kiali Operator (provided by Red Hat)
   - Red Hat OpenShift Service Mesh
 
